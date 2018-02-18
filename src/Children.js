@@ -1,11 +1,11 @@
 import React from 'react';
 
 class App extends React.Component {
-  render(){
-    return(
+  render() {
+    return (
       <Parent>
         <div className="childA">A</div>
-        <div className="childB">B</div>
+        <div className="childA">B</div>
         <div className="childC">C</div>
       </Parent>
     )
@@ -13,7 +13,7 @@ class App extends React.Component {
 }
 
 class Parent extends React.Component {
-  render(){
+  render() {
     const children = React.Children.toArray(this.props.children);
     const items = children ? children.map(child => child) : [];
     return items;

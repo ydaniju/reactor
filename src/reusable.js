@@ -20,7 +20,8 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <NumInput ref="red"
+        <NumInput
+          ref="red"
           update={this.update}
           max={255}
           label="Red"
