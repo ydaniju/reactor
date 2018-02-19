@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "deep-freeze": "^0.0.1",
     "expect": "^22.3.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
