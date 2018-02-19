@@ -9,7 +9,7 @@ ReactDOM.render(
 );
 registerServiceWorker();*/
 
-import { createStore } from "redux";
+// import { createStore } from "redux";
 
 const counter = (state = 0, action) => {
   if (typeof state === "undefined") { return 0 };
@@ -24,6 +24,29 @@ const counter = (state = 0, action) => {
   }
 };
 
+const createStore = (reducer) => {
+  let state;
+  let listeners = [];
+
+  const getState = () => state;
+
+  const dispatch = (action) => {
+    state = reducer(state, action);
+    listeners.forEach((listener) => listener());
+  };
+
+  const subscribe = (listener) => {
+    listeners.push(listener);
+    return () => {
+      listeners = listeners.filter((l) => l !== listener)
+    }
+  };
+
+  dispatch({});
+
+  return { getState, dispatch, subscribe };
+};
+
 const store = createStore(counter);
 
 const render = () => {
@@ -34,6 +57,6 @@ store.subscribe(render);
 
 render();
 
-document.addEventListener("mouseover", () => {
+document.addEventListener("click", () => {
   store.dispatch({type: "INCREMENT"});
 });
