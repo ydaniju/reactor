@@ -1,8 +1,5 @@
-const expect = require('expect');
-const Redux = require('redux');
-
 const counter = (state = 0, action) => {
-  if (typeof state === "undefined") { return state };
+  if (typeof state === "undefined") { return 0 };
 
   switch (action.type) {
     case "INCREMENT":
@@ -14,12 +11,39 @@ const counter = (state = 0, action) => {
   }
 };
 
-const { createStore } = Redux;
-const store = createStore(counter);
-console.log("initial state", store.getState());
-store.dispatch({type: "INCREMENT"});
-console.log("after an increment", store.getState());
+const createStore = (reducer) => {
+  let state;
+  let listeners = [];
 
-store.subscribe(() => {
+  const getState = () => state;
+
+  const dispatch = (action) => {
+    state = reducer(state, action);
+    listeners.forEach((listener) => listener());
+  };
+
+  const subscribe = (listener) => {
+    listeners.push(listener);
+    return () => {
+      listeners = listeners.filter((l) => l !== listener)
+    }
+  };
+
+  dispatch({});
+
+  return { getState, dispatch, subscribe };
+};
+
+const store = createStore(counter);
+
+const render = () => {
   document.body.innerText = store.getState();
-})
+}
+
+store.subscribe(render);
+
+render();
+
+document.addEventListener("click", () => {
+  store.dispatch({ type: "INCREMENT" });
+});
